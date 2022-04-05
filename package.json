@@ -1,0 +1,32 @@
+{
+  "name": "rba_githuib_action_ec2_runner",
+  "version": "1.0.0",
+  "description": "GitHub Action for automatic creation and registration AWS EC2 instance as a GitHub Actions self-hosted runner.",
+  "author": "Diego Bellon",
+  "license": "ISC",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AppGate-TFP/rba_githuib_action_ec2_runner.git"
+  },
+  "homepage": "https://github.com/AppGate-TFP/rba_githuib_action_ec2_runner#readme",
+  "bugs": {
+    "url": "https://github.com/AppGate-TFP/rba_githuib_action_ec2_runner/issues"
+  },
+  "scripts": {
+    "index": "node -r dotenv/config ./index.js",
+    "lint": "eslint ./*.js",
+    "package": "ncc build ./index.js"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0",
+    "aws-sdk": "^2.809.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.25.1",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.15.0"
+  }
+}
