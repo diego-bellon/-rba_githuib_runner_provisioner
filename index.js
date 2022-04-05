@@ -14,12 +14,12 @@ async function start() {
     const ec2InstanceId = await aws.startEc2Instance(label);
     setOutput(label, ec2InstanceId);
     await aws.waitForInstanceRunning(ec2InstanceId);
-    await gh.waitForRunnerRegistered(label);
+    // await gh.waitForRunnerRegistered(label);
 }
 
 async function stop() {
     await aws.terminateEc2Instance();
-    await gh.removeRunner();
+    // await gh.removeRunner();
 }
 
 (async function () {
