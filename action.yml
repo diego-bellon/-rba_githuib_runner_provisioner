@@ -5,6 +5,10 @@ branding:
   icon: 'box'
   color: 'orange'
 inputs:
+  github-token:
+    description: >-
+      The authorization token used for get a registration token to register a new Runner in the Actions for the repo
+    required: true
   mode:
     description: >-
       Specify here which mode you want to use:
