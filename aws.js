@@ -7,13 +7,13 @@ function buildUserDataScript(ghtoken, label) {
 
     return [
         '#!/bin/bash',
-        `yum install -y jq`,
-        `export githubRegistrationToken=$(curl -H \"Authorization: token ${ghtoken}\"   -X POST   -H \"Accept: application/vnd.github.v3+json\"   https://api.github.com/repos/${config.githubContext.owner}/${config.githubContext.repo}/actions/runners/registration-token | jq ".token")`,
-        `mkdir actions-runner && cd actions-runner`,
-        `case $(uname -m) in aarch64) ARCH="arm64" ;; amd64|x86_64) ARCH="x64" ;; esac && export RUNNER_ARCH=${ARCH}`,
-        `curl -O -L https://github.com/actions/runner/releases/download/v2.286.0/actions-runner-linux-${RUNNER_ARCH}-2.286.0.tar.gz`,
-        `tar xzf ./actions-runner-linux-${RUNNER_ARCH}-2.286.0.tar.gz`,
-        `export RUNNER_ALLOW_RUNASROOT=1`,
+        'yum install -y jq',
+        'export githubRegistrationToken=$(curl -H \"Authorization: token ${ghtoken}\"   -X POST   -H \"Accept: application/vnd.github.v3+json\"   https://api.github.com/repos/${config.githubContext.owner}/${config.githubContext.repo}/actions/runners/registration-token | jq ".token")',
+        'mkdir actions-runner && cd actions-runner',
+        'export RUNNER_ARCH=x64',
+        'curl -O -L https://github.com/actions/runner/releases/download/v2.286.0/actions-runner-linux-x64-2.286.0.tar.gz',
+        'tar xzf ./actions-runner-linux-${RUNNER_ARCH}-2.286.0.tar.gz',
+        'export RUNNER_ALLOW_RUNASROOT=1',
         `./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${githubRegistrationToken} --labels ${label}`,
         './run.sh',
     ];
