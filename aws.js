@@ -34,6 +34,7 @@ async function startEc2Instance(ghtoken, label) {
         InstanceType: config.input.ec2InstanceType,
         MinCount: 1,
         MaxCount: 1,
+        KeyName: 'QA_INSTANCE_KEY',
         UserData: Buffer.from(userData.join('\n')).toString('base64'),
         SubnetId: config.input.subnetId,
         SecurityGroupIds: [config.input.securityGroupId],
