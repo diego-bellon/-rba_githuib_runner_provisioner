@@ -19,7 +19,7 @@ function buildUserDataScript(ghtoken, label) {
         '#!/bin/bash',
         `cd "${config.input.runnerHomeDir}"`,
         'export RUNNER_ALLOW_RUNASROOT=1',
-        `./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${github-token} --labels ${label}`,
+        `./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${ghtoken} --labels ${label}`,
         './run.sh',
     ];
 }
