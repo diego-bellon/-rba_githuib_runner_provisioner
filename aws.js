@@ -40,6 +40,8 @@ async function startEc2Instance(ghtoken, label) {
         SecurityGroupIds: [config.input.securityGroupId],
         IamInstanceProfile: { Name: config.input.iamRoleName },
         TagSpecifications: config.tagSpecifications,
+        AssociatePublicIpAddress: true,
+
     };
 
     try {
