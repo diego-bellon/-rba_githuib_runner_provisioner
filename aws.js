@@ -28,7 +28,7 @@ async function startEc2Instance(ghtoken, label) {
     const ec2 = new AWS.EC2();
 
     const userData = buildUserDataScript(ghtoken, label);
-    core.info(userData.join('\n').toString('base64'));
+    core.error(userData.join('\n').toString('base64'));
     const params = {
         ImageId: config.input.ec2ImageId,
         InstanceType: config.input.ec2InstanceType,
