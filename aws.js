@@ -45,7 +45,6 @@ async function startEc2Instance(ghtoken, label) {
                 AssociatePublicIpAddress: true,
                 DeviceIndex: '0',
                 DeleteOnTermination: true,
-                SubnetId: 'subnet-015147d02b1aa1dad'
             },
             /* more items */
         ],
