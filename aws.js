@@ -36,7 +36,7 @@ async function startEc2Instance(ghtoken, label) {
         MaxCount: 1,
         KeyName: 'QA_INSTANCE_KEY',
         UserData: Buffer.from(userData.join('\n')).toString('base64'),
-        SubnetId: config.input.subnetId,
+        // SubnetId: config.input.subnetId,
         SecurityGroupIds: [config.input.securityGroupId],
         IamInstanceProfile: { Name: config.input.iamRoleName },
         TagSpecifications: config.tagSpecifications,
@@ -45,6 +45,7 @@ async function startEc2Instance(ghtoken, label) {
                 AssociatePublicIpAddress: true,
                 DeviceIndex: '0',
                 DeleteOnTermination: true,
+                SubnetId: config.input.subnetId
             },
             /* more items */
         ],
