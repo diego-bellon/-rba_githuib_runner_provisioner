@@ -45,7 +45,7 @@ async function startEc2Instance(ghtoken, label) {
                 AssociatePublicIpAddress: true,
                 DeviceIndex: '0',
                 DeleteOnTermination: true,
-                SubnetId: config.input.subnetId
+                SubnetId: config.input.subnetId,
                 Groups: [config.input.securityGroupId],
             },
             /* more items */
