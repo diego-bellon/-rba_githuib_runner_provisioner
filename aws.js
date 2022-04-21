@@ -4,11 +4,11 @@ const config = require('./config');
 
 // User data scripts are run as the root user
 function buildUserDataScript(ghtoken, label) {
-
-    return [
+    const userData = [
         '#!/bin/bash',
         'yum install -y jq',
-        'export token=$(curl -H "Authorization: token ${ghtoken}"   -X POST   -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${config.githubContext.owner}/${config.githubContext.repo}/actions/runners/registration-token | jq -r .token)',
+        'tokentmp = $(curl -H "Authorization: token ${ghtoken}" -X POST -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${config.githubContext.owner}/${config.githubContext.repo}/actions/runners/registration-token | jq -r .token)',
+        'export token=${tokentmp}',
         'mkdir actions-runner && cd actions-runner',
         'case $(uname -m) in aarch64) ARCH="arm64" ;; amd64|x86_64) ARCH="x64" ;; esac && export RUNNER_ARCH=${ARCH}',
         'curl -O -L https://github.com/actions/runner/releases/download/v2.286.0/actions-runner-linux-${RUNNER_ARCH}-2.286.0.tar.gz',
@@ -22,13 +22,14 @@ function buildUserDataScript(ghtoken, label) {
         // `./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${ghtoken} --labels ${label}`,
         // './run.sh',
     ];
+    core.error(userData.join('\n').toString('base64'));
+    return userData;
 }
 
 async function startEc2Instance(ghtoken, label) {
     const ec2 = new AWS.EC2();
 
     const userData = buildUserDataScript(ghtoken, label);
-    core.error(userData.join('\n').toString('base64'));
     const params = {
         ImageId: config.input.ec2ImageId,
         InstanceType: config.input.ec2InstanceType,
