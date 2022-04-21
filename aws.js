@@ -40,7 +40,14 @@ async function startEc2Instance(ghtoken, label) {
         SecurityGroupIds: [config.input.securityGroupId],
         IamInstanceProfile: { Name: config.input.iamRoleName },
         TagSpecifications: config.tagSpecifications,
-        PublicIpAddress: '',
+        NetworkInterfaces: [
+            {
+                AssociatePublicIpAddress: true,
+                DeleteOnTermination: true,
+                SubnetId: 'subnet-015147d02b1aa1dad'
+            },
+            /* more items */
+        ],
 
     };
 
