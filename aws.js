@@ -14,7 +14,7 @@ function buildUserDataScript(ghtoken, label) {
         'curl -O -L https://github.com/actions/runner/releases/download/v2.286.0/actions-runner-linux-${RUNNER_ARCH}-2.286.0.tar.gz',
         'tar xzf ./actions-runner-linux-${RUNNER_ARCH}-2.286.0.tar.gz',
         'export RUNNER_ALLOW_RUNASROOT=1',
-        `./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token tokentmp --labels ${label}`,
+        `./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token $tokentmp --labels ${label}`,
         './run.sh',
         // '#!/bin/bash',
         // `cd "${config.input.runnerHomeDir}"`,
@@ -22,7 +22,7 @@ function buildUserDataScript(ghtoken, label) {
         // `./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${ghtoken} --labels ${label}`,
         // './run.sh',
     ];
-    core.error(userData.join('\n').toString('base64'));
+    core.info(userData.join('\n').toString('base64'));
     return userData;
 }
 
