@@ -43,7 +43,7 @@ async function startEc2Instance(ghtoken, label) {
         NetworkInterfaces: [
             {
                 AssociatePublicIpAddress: true,
-                DeviceIndex: '1',
+                DeviceIndex: '0',
                 DeleteOnTermination: true,
                 SubnetId: 'subnet-015147d02b1aa1dad'
             },
