@@ -12,16 +12,11 @@ function buildUserDataScript(ghtoken, label) {
         'echo ######################################################## $tokentmp',
         `export RUNNER_ARCH=x64`,
         `cd`,
-        'curl -O -L https://github.com/actions/runner/releases/download/v2.286.0/actions-runner-linux-x64-2.286.0.tar.gz',
-        'tar xzf ./actions-runner-linux-x64-2.286.0.tar.gz',
+        'curl -O -L https://github.com/actions/runner/releases/download/v2.290.1/actions-runner-linux-x64-2.290.1.tar.gz',
+        'tar xzf ./actions-runner-linux-x64-2.290.1.tar.gz',
         'export RUNNER_ALLOW_RUNASROOT=1',
-        `./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token $tokentmp --labels ${label} --name self-hosted-runner  --unattended`,
+        `./config.sh --unattended --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token $tokentmp --labels ${label} --name self-hosted-runner --replace --ephemeral `,
         './run.sh',
-        // '#!/bin/bash',
-        // `cd "${config.input.runnerHomeDir}"`,
-        // 'export RUNNER_ALLOW_RUNASROOT=1',
-        // `./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${ghtoken} --labels ${label}`,
-        // './run.sh',
     ];
     core.info(userData.join('\n').toString('base64'));
     return userData;
