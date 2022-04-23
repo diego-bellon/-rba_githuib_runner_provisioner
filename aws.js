@@ -21,7 +21,7 @@ function buildUserDataScript(ghtoken, label) {
         // `./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token ${ghtoken} --labels ${label}`,
         // './run.sh',
     ];
-    core.error(userData.join('\n').toString('base64'));
+    core.info(userData.join('\n').toString('base64'));
     return userData;
 }
 
