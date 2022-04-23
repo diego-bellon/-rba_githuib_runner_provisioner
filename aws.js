@@ -5,7 +5,9 @@ const config = require('./config');
 // User data scripts are run as the root user
 function buildUserDataScript(ghtoken, label) {
     const userData = [
-        '#!/bin/bash',
+        '#!/bin/bash -xe',
+        'exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1',
+        'echo "Hello from user-data!"',
         'set -a',
         `export tokentmp=$(curl -H "Authorization: token ${ghtoken}" -X POST -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${config.githubContext.owner}/${config.githubContext.repo}/actions/runners/registration-token | jq -r .token)`,
         'mkdir actions-runner && cd actions-runner',
