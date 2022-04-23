@@ -6,14 +6,14 @@ const config = require('./config');
 function buildUserDataScript(ghtoken, label) {
     const userData = [
         '#!/bin/bash',
-        `tokentmp=$(curl -H "Authorization: token ${ghtoken}" -X POST -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${config.githubContext.owner}/${config.githubContext.repo}/actions/runners/registration-token | jq -r .token)`,
+        `export tokentmp=$(curl -H "Authorization: token ${ghtoken}" -X POST -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${config.githubContext.owner}/${config.githubContext.repo}/actions/runners/registration-token | jq -r .token)`,
         'mkdir actions-runner && cd actions-runner',
         'echo ######################################################## $tokentmp',
-        `RUNNER_ARCH=x64`,
+        `export RUNNER_ARCH=x64`,
         `cd`,
         'curl -O -L https://github.com/actions/runner/releases/download/v2.286.0/actions-runner-linux-x64-2.286.0.tar.gz',
         'tar xzf ./actions-runner-linux-x64-2.286.0.tar.gz',
-        'RUNNER_ALLOW_RUNASROOT=1',
+        'export RUNNER_ALLOW_RUNASROOT=1',
         `./config.sh --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token $tokentmp --labels ${label} --name self-hosted-runner  --unattended`,
         './run.sh',
         // '#!/bin/bash',
