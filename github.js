@@ -2,15 +2,19 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const _ = require('lodash');
 const config = require('./config');
+const Octokit = require("@octokit/rest");
 
 // use the unique label to find the runner
 // as we don't have the runner's id, it's not possible to get it in any other way
 async function getRunner(label) {
-    const octokit = github.getOctokit(config.input.githubToken);
+    const octokit = new Octokit({
+        auth: config.input.githubtoken
+    });
 
     try {
         const runners = await octokit.paginate('GET /repos/{owner}/{repo}/actions/runners', config.githubContext);
-        const foundRunners = _.filter(runners, { labels: [{ name: label }] });
+        const foundRunners = _.filter(runners, {labels: [{name: label}]});
+        core.info('Runner found: ' + foundRunners);
         return foundRunners.length > 0 ? foundRunners[0] : null;
     } catch (error) {
         return null;
@@ -31,6 +35,25 @@ async function getRegistrationToken() {
     }
 }
 
+async function removeRunnerFromRepo() {
+    const runner = await getRunner(config.input.label);
+    const octokit = new Octokit({
+        auth: config.input.githubtoken
+    });
+    try {
+        await octokit.request('DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}', {
+            owner: config.input.owner,
+            repo: config.input.repo,
+            runner_id: runner.id
+        });
+        core.info(`GitHub self-hosted runner ${runner.name} is removed`);
+        return;
+    } catch (error) {
+        core.error('GitHub self-hosted runner removal error');
+        throw error;
+    }
+}
+
 async function removeRunner() {
     const runner = await getRunner(config.input.label);
     const octokit = github.getOctokit(config.input.githubToken);
@@ -42,7 +65,7 @@ async function removeRunner() {
     }
 
     try {
-        await octokit.request('DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}', _.merge(config.githubContext, { runner_id: runner.id }));
+        await octokit.request('DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}', _.merge(config.githubContext, {runner_id: runner.id}));
         core.info(`GitHub self-hosted runner ${runner.name} is removed`);
         return;
     } catch (error) {
@@ -87,4 +110,5 @@ module.exports = {
     getRegistrationToken,
     removeRunner,
     waitForRunnerRegistered,
+    removeRunnerFromRepo,
 };

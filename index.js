@@ -1,5 +1,5 @@
 const aws = require('./aws');
-// const github = require('./github');
+const github = require('./github');
 const config = require('./config');
 const core = require('@actions/core');
 
@@ -20,7 +20,7 @@ async function start() {
 
 async function stop() {
     await aws.terminateEc2Instance();
-    // await gh.removeRunner();
+    await github.removeRunnerFromRepo();
 }
 
 (async function () {
