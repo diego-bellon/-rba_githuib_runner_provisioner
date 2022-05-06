@@ -20,6 +20,11 @@ inputs:
       EC2 Image Id (AMI). The new runner will be launched from this image.
       This input is required if you use the 'start' mode.
     required: false
+  runnerVersion:
+    description: >-
+      The GitHub Action Runner version that you want to use. Look at for more info... https://github.com/actions/runner/releases
+    required: true
+
   ec2-instance-type:
     description: >-
       EC2 Instance Type. 

@@ -6,6 +6,7 @@ class Config {
         this.input = {
             mode: core.getInput('mode'),
             githubtoken: core.getInput('github-token'),
+            runnerVersion: core.getInput('runnerVersion'),
             ec2ImageId: core.getInput('ec2-image-id'),
             ec2InstanceType: core.getInput('ec2-instance-type'),
             subnetId: core.getInput('subnet-id'),
