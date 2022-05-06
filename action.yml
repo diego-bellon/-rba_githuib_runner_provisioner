@@ -23,7 +23,7 @@ inputs:
   runnerVersion:
     description: >-
       The GitHub Action Runner version that you want to use. Look at for more info... https://github.com/actions/runner/releases
-    required: true
+    required: false
 
   ec2-instance-type:
     description: >-
