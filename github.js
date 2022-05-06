@@ -2,7 +2,6 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const _ = require('lodash');
 const config = require('./config');
-const Octokit = require("@octokit/rest");
 
 // use the unique label to find the runner
 // as we don't have the runner's id, it's not possible to get it in any other way
@@ -37,9 +36,10 @@ async function getRegistrationToken() {
 
 async function removeRunnerFromRepo() {
     const runner = await getRunner(config.input.label);
-    const octokit = new Octokit({
-        auth: config.input.githubtoken
-    });
+    // const octokit = new Octokit({
+    //     auth: config.input.githubtoken
+    // });
+    const octokit = github.getOctokit(config.input.githubtoken);
     try {
         await octokit.request('DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}', {
             owner: config.input.owner,
