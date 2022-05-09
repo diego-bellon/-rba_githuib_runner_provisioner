@@ -11,6 +11,8 @@ async function getRunner(label, owner, repo) {
     core.info('Getting octokit');
     try {
         core.info('Getting runner');
+        core.info('Getting owner '+owner);
+        core.info('Getting repo '+repo);
         // const runners = await octokit.paginate('GET /repos/{owner}/{repo}/actions/runners', config.githubContext);
         const runners = await octokit.rest.actions.listSelfHostedRunnersForRepo({
             owner,
