@@ -10,12 +10,14 @@ async function getRunner(label, owner, repo) {
     const octokit = github.getOctokit(config.input.githubtoken);
     core.info('Getting octokit');
     try {
-        core.info('Getting octokit');
+        core.info('Getting runner');
         // const runners = await octokit.paginate('GET /repos/{owner}/{repo}/actions/runners', config.githubContext);
         const runners = await octokit.rest.actions.listSelfHostedRunnersForRepo({
             owner,
             repo,
         });
+        core.info('Runners length'+runners.length);
+        core.info('Runners info'+runners[0]);
         const foundRunners = _.filter(runners, {labels: [{name: label}]});
         core.info('Runner found: ' + foundRunners);
         return foundRunners.length > 0 ? foundRunners[0] : null;
@@ -45,7 +47,7 @@ async function removeRunnerFromRepo() {
         await octokit.rest.actions.deleteSelfHostedRunnerFromRepo({
             owner: config.input.owner,
             repo: config.input.repo,
-            runner_id: runner.label,
+            runner_id: runner.id,
         });
         core.info(`GitHub self-hosted runner ${runner.name} is removed`);
         return;
