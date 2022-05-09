@@ -20,8 +20,8 @@ async function start() {
 }
 
 async function stop() {
-    await aws.terminateEc2Instance();
     await github.removeRunnerFromRepo();
+    await aws.terminateEc2Instance();
 }
 
 (async function () {
