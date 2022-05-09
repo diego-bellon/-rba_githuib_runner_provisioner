@@ -40,11 +40,15 @@ async function getRegistrationToken() {
 
 async function removeRunnerFromRepo() {
     core.info('Runner label '+config.input.label);
-    const runner = await getRunner(config.input.label, config.githubContext.owner,config.githubContext.repo);
+    const owner = config.githubContext.owner;
+    const repo = config.githubContext.repo;
+    const runner = await getRunner(config.input.label, owner,repo);
     const octokit = github.getOctokit(config.input.githubtoken);
     core.info('Runner id '+runner.id);
     try {
-        const response = await octokit.request('DELETE /repos/'+config.githubContext.owner+'/'+config.githubContext.repo+'/actions/runners/'+runner.id,config.githubContext);
+        core.info('Getting owner '+owner);
+        core.info('Getting repo '+repo);
+        const response = await octokit.request('DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}',_.merge(config.githubContext, {runner_id: runner.id}));
         core.info(`GitHub self-hosted runner ${runner.name} is removed`);
         core.info(`Response ${response}`);
         // await octokit.rest.actions.deleteSelfHostedRunnerFromRepo({
