@@ -5,13 +5,17 @@ const config = require('./config');
 
 // use the unique label to find the runner
 // as we don't have the runner's id, it's not possible to get it in any other way
-async function getRunner(label) {
-    const octokit = new Octokit({
-        auth: config.input.githubtoken
-    });
-
+async function getRunner(label, owner, repo) {
+    core.info('Beginning of get runner');
+    const octokit = github.getOctokit(config.input.githubtoken);
+    core.info('Getting octokit');
     try {
-        const runners = await octokit.paginate('GET /repos/{owner}/{repo}/actions/runners', config.githubContext);
+        core.info('Getting octokit');
+        // const runners = await octokit.paginate('GET /repos/{owner}/{repo}/actions/runners', config.githubContext);
+        const runners = await octokit.rest.actions.listSelfHostedRunnersForRepo({
+            owner,
+            repo,
+        });
         const foundRunners = _.filter(runners, {labels: [{name: label}]});
         core.info('Runner found: ' + foundRunners);
         return foundRunners.length > 0 ? foundRunners[0] : null;
@@ -35,13 +39,10 @@ async function getRegistrationToken() {
 }
 
 async function removeRunnerFromRepo() {
-    const runner = await getRunner(config.input.label);
-    // const octokit = new Octokit({
-    //     auth: config.input.githubtoken
-    // });
+    const runner = await getRunner(config.input.label, config.githubContext.owner,config.githubContext.repo);
     const octokit = github.getOctokit(config.input.githubtoken);
     try {
-        await octokit.request('DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}', {
+        await octokit.rest.actions.deleteSelfHostedRunnerFromRepo({
             owner: config.input.owner,
             repo: config.input.repo,
             runner_id: runner.id
