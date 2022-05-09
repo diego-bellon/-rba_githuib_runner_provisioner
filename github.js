@@ -45,7 +45,7 @@ async function removeRunnerFromRepo() {
         await octokit.rest.actions.deleteSelfHostedRunnerFromRepo({
             owner: config.input.owner,
             repo: config.input.repo,
-            runner_id: runner.id
+            runner_id: runner.label,
         });
         core.info(`GitHub self-hosted runner ${runner.name} is removed`);
         return;
