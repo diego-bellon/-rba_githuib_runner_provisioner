@@ -19,14 +19,23 @@ async function start() {
     // await gh.waitForRunnerRegistered(label);
 }
 
-async function stop() {
+async function remove() {
     await github.removeRunnerFromRepo();
+}
+async function stop() {
     await aws.terminateEc2Instance();
 }
 
 (async function () {
     try {
-        config.input.mode === 'start' ? await start() : await stop();
+        if (config.input.mode === 'start'){
+            await start();
+        }else if(config.input.mode === 'remove'){
+            await remove();
+        }else{
+            await stop();
+        }
+
     } catch (error) {
         core.error(error);
         core.setFailed(error.message);
