@@ -57,7 +57,7 @@ async function removeRunnerFromRepo() {
 
 async function removeRunner() {
     const runner = await getRunner(config.input.label);
-    const octokit = github.getOctokit(config.input.githubToken);
+    const octokit = github.getOctokit(config.input.githubtoken);
 
     // skip the runner removal process if the runner is not found
     if (!runner) {
