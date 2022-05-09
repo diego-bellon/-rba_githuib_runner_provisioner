@@ -11,8 +11,9 @@ function setOutput(label, ec2InstanceId) {
 async function start() {
     const label = config.generateUniqueLabel();
     const githubtoken = config.input.githubtoken;
+    const runnerVersion = config.input.runnerVersion;
     // const githubRegistrationToken = await github.getRegistrationToken();
-    const ec2InstanceId = await aws.startEc2Instance(githubtoken,label);
+    const ec2InstanceId = await aws.startEc2Instance(githubtoken,label,runnerVersion);
     setOutput(label, ec2InstanceId);
     await aws.waitForInstanceRunning(ec2InstanceId);
     // await gh.waitForRunnerRegistered(label);

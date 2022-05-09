@@ -3,7 +3,7 @@ const core = require('@actions/core');
 const config = require('./config');
 
 // User data scripts are run as the root user
-function buildUserDataScript(ghtoken, label) {
+function buildUserDataScript(ghtoken, label, runnerVersion) {
     const userData = [
         '#!/bin/bash -xe',
         'exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1',
@@ -12,8 +12,8 @@ function buildUserDataScript(ghtoken, label) {
         'mkdir actions-runner && cd actions-runner',
         'echo $tokentmp',
         `export RUNNER_ARCH=x64`,
-        `curl -O -L https://github.com/actions/runner/releases/download/v${config.githubContext.runnerVersion}/actions-runner-linux-x64-${config.githubContext.runnerVersion}.tar.gz`,
-        `tar xzf ./actions-runner-linux-x64-${config.githubContext.runnerVersion}.tar.gz`,
+        `curl -O -L https://github.com/actions/runner/releases/download/v${runnerVersion}/actions-runner-linux-x64-${runnerVersion}.tar.gz`,
+        `tar xzf ./actions-runner-linux-x64-${runnerVersion}.tar.gz`,
         'export RUNNER_ALLOW_RUNASROOT=1',
         `./config.sh --unattended --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token $(curl -H "Authorization: token ${ghtoken}" -X POST -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${config.githubContext.owner}/${config.githubContext.repo}/actions/runners/registration-token | jq -r .token) --labels ${label} --name self-hosted-runner --replace`,
         './run.sh',
@@ -22,10 +22,10 @@ function buildUserDataScript(ghtoken, label) {
     return userData;
 }
 
-async function startEc2Instance(ghtoken, label) {
+async function startEc2Instance(ghtoken, label, runnerVersion) {
     const ec2 = new AWS.EC2();
 
-    const userData = buildUserDataScript(ghtoken, label);
+    const userData = buildUserDataScript(ghtoken, label, runnerVersion);
     const params = {
         ImageId: config.input.ec2ImageId,
         InstanceType: config.input.ec2InstanceType,
