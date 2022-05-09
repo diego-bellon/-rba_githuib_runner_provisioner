@@ -24,7 +24,8 @@ async function getRunner(label, owner, repo) {
         core.info('Runner found: ' + foundRunners);
         return foundRunners.length > 0 ? foundRunners[0] : null;
     } catch (error) {
-        return null;
+        core.error('GitHub Registration Token receiving error');
+        throw error;
     }
 }
 
@@ -43,6 +44,7 @@ async function getRegistrationToken() {
 }
 
 async function removeRunnerFromRepo() {
+    core.info('Runner label'+config.input.label);
     const runner = await getRunner(config.input.label, config.githubContext.owner,config.githubContext.repo);
     const octokit = github.getOctokit(config.input.githubtoken);
     core.info('Runner id'+runner.id);
