@@ -15,7 +15,7 @@ function buildUserDataScript(ghtoken, label, runnerVersion) {
         `curl -O -L https://github.com/actions/runner/releases/download/v${runnerVersion}/actions-runner-linux-x64-${runnerVersion}.tar.gz`,
         `tar xzf ./actions-runner-linux-x64-${runnerVersion}.tar.gz`,
         'export RUNNER_ALLOW_RUNASROOT=1',
-        `./config.sh --unattended --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token $(curl -H "Authorization: token ${ghtoken}" -X POST -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${config.githubContext.owner}/${config.githubContext.repo}/actions/runners/registration-token | jq -r .token) --labels ${label} --name self-hosted-runner --replace`,
+        `./config.sh --unattended --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token $(curl -H "Authorization: token ${ghtoken}" -X POST -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${config.githubContext.owner}/${config.githubContext.repo}/actions/runners/registration-token | jq -r .token) --labels ${label} --name self-hosted-runner-${config.generateUniqueLabel()} --replace`,
         './run.sh',
     ];
     core.info(userData.join('\n').toString('base64'));
