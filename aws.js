@@ -13,7 +13,6 @@ function buildUserDataScript(ghtoken, label, runnerVersion) {
         'sleep $random',
         'cd /actions-runnner',
         `export RUNNER_ARCH=x64`,
-        `tar xzf ./actions-runner-linux-x64-${runnerVersion}.tar.gz`,
         'export RUNNER_ALLOW_RUNASROOT=1',
         `./config.sh --unattended --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token $(curl -H "Authorization: token ${ghtoken}" -X POST -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${config.githubContext.owner}/${config.githubContext.repo}/actions/runners/registration-token | jq -r .token) --labels ${label} --name self-hosted-runner-${config.generateUniqueLabel()} --replace`,
         './run.sh',
