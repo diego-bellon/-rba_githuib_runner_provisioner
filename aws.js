@@ -23,7 +23,7 @@ function buildUserDataScript(ghtoken, label, runnerVersion) {
         `echo "while [[ \\"\\$registration_token\\" == \\"null\\" && \\$date_start < \\$date_finish]]; do" >> get-runner-token.sh`,
         `echo " date_start=\\$(date --date='+0 seconds'  +"%Y-%m-%d %H:%M:%S")" >> get-runner-token.sh`,
         `echo " response=\\$(curl -H "Authorization: token ${ghtoken}" -X POST -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${config.githubContext.owner}/${config.githubContext.repo}/actions/runners/registration-token)" >> get-runner-token.sh`,
-        `echo " registration_token=\\$(echo \\"\\$response" | jq -r .token)\\" >> get-runner-token.sh`,
+        `echo " registration_token=\\$(echo \\"$response\\" | jq -r .token)" >> get-runner-token.sh`,
         'echo " sleep 20" >> get-runner-token.sh',
         'echo "done" >> get-runner-token.sh',
         'echo "export RUNNER_TOKEN=\\$registration_token" >> get-runner-token.sh',
