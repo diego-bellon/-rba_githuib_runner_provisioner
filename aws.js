@@ -14,7 +14,16 @@ function buildUserDataScript(ghtoken, label, runnerVersion) {
         'cd /actions-runnner',
         `export RUNNER_ARCH=x64`,
         'export RUNNER_ALLOW_RUNASROOT=1',
-        `./config.sh --unattended --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token $(curl -H "Authorization: token ${ghtoken}" -X POST -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${config.githubContext.owner}/${config.githubContext.repo}/actions/runners/registration-token | jq -r .token) --labels ${label} --name self-hosted-runner-${config.generateUniqueLabel()} --replace`,
+        `date_start=$(date --date='+0 seconds'  +"%Y-%m-%d %H:%M:%S")`,
+        `date_finish=$(date --date='+'5' minutes' +"%Y-%m-%d %H:%M:%S")`,
+        'registration_token=""',
+        'while [[ "$registration_token" == "null" || -z "$registration_token"]] && [$date_start < $date_finish]; do',
+        `date_start=$(date --date='+0 seconds'  +"%Y-%m-%d %H:%M:%S")`,
+        `response=$(curl -H "Authorization: token ${ghtoken}" -X POST -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${config.githubContext.owner}/${config.githubContext.repo}/actions/runners/registration-token)`,
+        `registration_token=$(echo "$response" | jq -r .token)`,
+        'sleep 20',
+        'done',
+        `./config.sh --unattended --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token $registration_token --labels ${label} --name self-hosted-runner-${config.generateUniqueLabel()} --replace`,
         './run.sh',
     ];
     core.info(userData.join('\n').toString('base64'));
