@@ -16,7 +16,7 @@ function buildUserDataScript(ghtoken, label, runnerVersion) {
         'export RUNNER_ALLOW_RUNASROOT=1',
         `date_start=$(date --date='+0 seconds'  +"%Y-%m-%d %H:%M:%S")`,
         `date_finish=$(date --date='+'5' minutes' +"%Y-%m-%d %H:%M:%S")`,
-        `registration_token=''`,
+        `registration_token='null'`,
         'while [[ "$registration_token" == "null" || -z "$registration_token"]] && [$date_start < $date_finish]; do',
         `date_start=$(date --date='+0 seconds'  +"%Y-%m-%d %H:%M:%S")`,
         `response=$(curl -H "Authorization: token ${ghtoken}" -X POST -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${config.githubContext.owner}/${config.githubContext.repo}/actions/runners/registration-token)`,
