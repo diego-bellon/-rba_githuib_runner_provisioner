@@ -22,7 +22,7 @@ function buildUserDataScript(ghtoken, label, runnerVersion) {
         `echo "date1_finish=\\$(date --date='+1 minutes' +\\"%Y-%m-%d %H:%M:%S\\")" >> get-runner-token.sh`,
         `echo "while [[ \\$date1_start < \\$date1_finish ]]; do" >> get-runner-token.sh`,
         `echo " status=\\$(appgate_service_configurator status | jq -r .status)" >> get-runner-token.sh`,
-        `echo " echo "Appgate SDP status => \\$status "" >> get-runner-token.sh`,
+        `echo " echo "Appgate SDP status is \\$status "" >> get-runner-token.sh`,
         `echo " if [ \\$status == \\"Connected\\" ]; then" >> get-runner-token.sh`,
         `echo "  echo \\"Its now connected\\"" >> get-runner-token.sh`,
         `echo "  break" >> get-runner-token.sh`,
