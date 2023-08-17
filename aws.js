@@ -18,7 +18,7 @@ function buildUserDataScript(ghtoken, label, runnerVersion) {
         `echo "#!/bin/bash" > get-runner-token.sh`,
         `echo "set -e" >> get-runner-token.sh`,
         `echo "date_start=\$(date --date='+0 seconds'  +\"%Y-%m-%d %H:%M:%S\")" >> get-runner-token.sh`,
-        `echo "date_finish=\$(date --date='+'10' minutes' +\"%Y-%m-%d %H:%M:%S\")" >> get-runner-token.sh`,
+        `echo "date_finish=\$(date --date='+'5' minutes' +\"%Y-%m-%d %H:%M:%S\")" >> get-runner-token.sh`,
         `echo "registration_token=\"null\"" >> get-runner-token.sh`,
         `echo "while [[ \"\$registration_token\" == \"null\" && \$date_start < \$date_finish]]; do" >> get-runner-token.sh`,
         `echo " date_start=\$(date --date='+0 seconds'  +"%Y-%m-%d %H:%M:%S")" >> get-runner-token.sh`,
@@ -27,6 +27,9 @@ function buildUserDataScript(ghtoken, label, runnerVersion) {
         'echo " sleep 20" >> get-runner-token.sh',
         'echo "done" >> get-runner-token.sh',
         'echo "export RUNNER_TOKEN=\$registration_token" >> get-runner-token.sh',
+        'echo "echo \"TOKEN FINALLY IS \$RUNNER_TOKEN\" >> get-runner-token.sh',
+        'chmod a+x get-runner-token.sh',
+        './get-runner-token.sh',
         `./config.sh --unattended --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token $RUNNER_TOKEN --labels ${label} --name self-hosted-runner-${config.generateUniqueLabel()} --replace`,
         './run.sh',
     ];
