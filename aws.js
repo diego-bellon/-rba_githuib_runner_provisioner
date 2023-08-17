@@ -27,7 +27,7 @@ function buildUserDataScript(ghtoken, label, runnerVersion) {
         'echo " sleep 20" >> get-runner-token.sh',
         'echo "done" >> get-runner-token.sh',
         'echo "echo \\"TOKEN FINALLY IS \\$registration_token\\"" >> get-runner-token.sh',
-        `echo "./config.sh --unattended --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token $\\registration_token --labels ${label} --name self-hosted-runner-${config.generateUniqueLabel()} --replace" >> get-runner-token.sh`,
+        `echo "./config.sh --unattended --url https://github.com/${config.githubContext.owner}/${config.githubContext.repo} --token \\$registration_token --labels ${label} --name self-hosted-runner-${config.generateUniqueLabel()} --replace" >> get-runner-token.sh`,
         `echo "./run.sh" >> get-runner-token.sh`,
         'chmod a+x get-runner-token.sh',
         './get-runner-token.sh'
